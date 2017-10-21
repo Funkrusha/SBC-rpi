@@ -16,3 +16,13 @@ alias cd..='cd ..'
 EOF
     sudo chown pi:pi ~/.bash_aliases
 fi
+
+if [ ! -d ~/bin ]; then
+    mkdir ~/bin
+    chown -R pi:pi ~/bin
+
+    echo "#!/bin/bash\nvcgencmd measure_temp" > ~/bin/pi-temp
+    echo "#!/bin/bash\nvcgencmd get_config int" > ~/bin/pi-config
+    echo "#!/bin/bash\nvcgencmd get_mem arm && vcgencmd get_mem gpu" > ~/bin/pi-mem
+    echo "#!/bin/bash\nvcgencmd version" > ~/bin/pi-version
+fi
