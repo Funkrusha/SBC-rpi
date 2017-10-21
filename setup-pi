@@ -1,28 +1,36 @@
 #!/bin/bash
 
 # update the system first
+echo "update current system"
 sudo apt-get update && sudo apt-get upgrade
 
 # install basic tools
+echo "install basic tools"
 sudo apt-get install -y build-essential vim
 
 # setup basic bash aliases
+echo "setup bash aliases"
 if [ ! -e ~/.bash_aliases ]; then
-    cat << EOF
+    cat > ~/.bash_aliases << EOF
 alias l='ls -ahl --color=auto'
 alias ..='cd ..'
 alias ...='cd ../..'
 alias cd..='cd ..'
 EOF
     sudo chown pi:pi ~/.bash_aliases
+    . .~/.bash_aliases
 fi
 
+# basic scripts
+echo "install basic pi information scripts"
 if [ ! -d ~/bin ]; then
     mkdir ~/bin
-    chown -R pi:pi ~/bin
 
-    echo "#!/bin/bash\nvcgencmd measure_temp" > ~/bin/pi-temp
-    echo "#!/bin/bash\nvcgencmd get_config int" > ~/bin/pi-config
-    echo "#!/bin/bash\nvcgencmd get_mem arm && vcgencmd get_mem gpu" > ~/bin/pi-mem
-    echo "#!/bin/bash\nvcgencmd version" > ~/bin/pi-version
+    echo -e '#!/bin/bash\nvcgencmd measure_temp' > ~/bin/pi-temp
+    echo -e '#!/bin/bash\nvcgencmd get_config int' > ~/bin/pi-config
+    echo -e '#!/bin/bash\nvcgencmd get_mem arm && vcgencmd get_mem gpu' > ~/bin/pi-mem
+    echo -e '#!/bin/bash\nvcgencmd version' > ~/bin/pi-version
+
+    chown -R pi:pi ~/bin
+    chmod +x ~/bin/pi-*
 fi
